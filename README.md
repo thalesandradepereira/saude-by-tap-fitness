@@ -1,6 +1,6 @@
 # Saúde by TAP Fitness
 
-**MVP 0.2 — PWA de entrevista pré-treino para Android, iOS e computadores.**
+**MVP 0.3 — PWA de entrevista pré-treino para Android, iOS e computadores.**
 
 Um aplicativo web responsivo que coleta respostas de um check-in de bem-estar, **identifica sinais de alerta antes de qualquer recomendação**, e apresenta orientações conservadoras sobre um treino **já definido por um profissional de Educação Física**.
 
@@ -11,12 +11,14 @@ Um aplicativo web responsivo que coleta respostas de um check-in de bem-estar, *
 - Acesso por link, interface mobile-first, PWA instalável, inclusive modo offline após primeira visita HTTPS.
 - Perfil temporário com apelido, modalidade de treino, duração programada, teto subjetivo de esforço informado, plano aprovado e confirmação de maioridade.
 - Check-in com respostas explícitas para dez perguntas de segurança e quatro indicadores subjetivos de recuperação.
-- **Mapa corporal interativo e acessível** (frente/costas e checklist), cobrindo membros, cabeça, coluna e regiões internas de tórax/abdome/pelve. Permite assinalar vários locais, intensidade de 1–10 e natureza habitual/nova/incerta.
+- **Etapa 3 exclusiva e visível — Mapa corporal** (frente/costas e checklist), cobrindo membros, cabeça, coluna e regiões internas de tórax/abdome/pelve. Permite assinalar vários locais, intensidade de 1–10 e natureza habitual/nova/incerta, ou informar que não há incômodos.
+- **Navegação em quatro etapas**: Perfil → Check-in → Mapa corporal → Resultado. A mudança resolve o mapa pouco visível, anteriormente localizado após as perguntas de recuperação na etapa 2.
 - **Sugestões condicionais de atividades físicas** (caminhada, bicicleta, força e mobilidade), somente quando houver plano aprovado e ausência de alertas; as sugestões são filtradas de modo conservador por localização, para discussão com o professor. Não há prescrição automatizada.
 - Regras determinísticas com prioridade: **urgência → revisão → recuperação → redução conservadora → plano aprovado**.
 - Orientações explicáveis, limites de RPE e tempo, sem progressão automática de carga.
 - Fluxos de teste automatizados em Node.js, sem bibliotecas externas.
 - Privacidade por padrão: as respostas e o apelido **não são gravados nem enviados** por este protótipo. Nenhum banco, tracking, analytics ou autenticação real.
+- O service worker usa atualização **network-first**, com cache de arquivos públicos somente como alternativa offline, para não manter páginas antigas após uma publicação.
 
 ## Começar localmente
 

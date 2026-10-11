@@ -1,5 +1,5 @@
 // Apenas assets públicos do aplicativo são cacheados. Nenhuma resposta de saúde é persistida.
-const CACHE = 'tap-fitness-pilot-v2';
+const CACHE = 'tap-fitness-pilot-v3';
 const ASSETS = ['./', './index.html', './privacy.html', './styles.css', './js/app.mjs', './js/engine.mjs', './manifest.webmanifest', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));
@@ -9,5 +9,18 @@ self.addEventListener('activate', (event) => {
 });
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET' || new URL(event.request.url).origin !== self.location.origin) return;
-  event.respondWith(caches.match(event.request).then(hit => hit || fetch(event.request)));
+  // Priorizar a publicação atual: SW anterior usava cache-first e podia ocultar melhorias.
+  // Cache limitado a arquivos públicos; nunca armazenar respostas do formulário.
+  event.respondWith(fetch(event.request).then(response => {
+    if (response.ok) {
+      const copy = response.clone();
+      event.waitUntil(caches.open(CACHE).then(cache => cache.put(event.request, copy)));
+    }
+    return response;
+  }).catch(async () => {
+    const cached = await caches.match(event.request);
+    if (cached) return cached;
+    if (event.request.mode === 'navigate') return caches.match('./index.html');
+    return Response.error();
+  }));
 });

@@ -3,6 +3,7 @@ import { assess, BODY_REGIONS } from './engine.mjs';
 const $ = (id) => document.getElementById(id);
 const profileForm = $('profile-form');
 const checkForm = $('check-form');
+const mapForm = $('map-form');
 const yes = (form, name) => new FormData(form).get(name) === 'yes';
 let profile = null;
 const selectedRegions = new Set();
@@ -10,12 +11,12 @@ const circlesByRegion = new Map();
 const inputsByRegion = new Map();
 
 function showStep(step) {
-  for (let i=1; i<=3; i++) {
+  for (let i=1; i<=4; i++) {
     $('panel-'+i).classList.toggle('hidden', i !== step);
     $('chip-'+i).classList.toggle('active', i === step);
     $('chip-'+i).classList.toggle('completed', i < step);
   }
-  $('progress-bar').style.width = `${step * 100/3}%`;
+  $('progress-bar').style.width = `${step * 100/4}%`;
   $('form-error').classList.add('hidden');
   $('main').scrollIntoView({behavior:'instant', block:'start'});
 }
@@ -127,11 +128,22 @@ function createMap() {
 }
 createMap();
 $('clear-regions').addEventListener('click', () => { selectedRegions.clear(); $('discomfortKind').value=''; refreshRegions(); });
+$('no-regions').addEventListener('click', () => {
+  selectedRegions.clear(); $('discomfortKind').value=''; refreshRegions();
+  $('region-summary').textContent = 'Confirmado: nenhum incômodo informado hoje';
+});
 $('back-button').addEventListener('click', () => showStep(1));
+$('map-back-button').addEventListener('click', () => showStep(2));
 
 checkForm.addEventListener('submit', (event) => {
   event.preventDefault();
   if (!checkForm.reportValidity() || !profile) return;
+  showStep(3);
+});
+
+mapForm.addEventListener('submit', (event) => {
+  event.preventDefault();
+  if (!mapForm.reportValidity() || !checkForm.reportValidity() || !profile) return;
   const data = {...profile};
   const answers = new FormData(checkForm);
   for (const key of ['chestPain','severeBreathlessness','fainting','fever','dizziness','newPain','healthChange','suddenSeverePain','neuroWarning','cannotBearWeight']) {
@@ -144,7 +156,7 @@ checkForm.addEventListener('submit', (event) => {
   data.discomfortIntensity = selectedRegions.size ? Number($('discomfortIntensity').value) : 0;
   data.discomfortKind = selectedRegions.size ? $('discomfortKind').value : 'nenhum';
   if (selectedRegions.size && !data.discomfortKind) return error('Informe como descreveria o incômodo nas áreas selecionadas.');
-  try { renderResult(assess(data), profile.alias); showStep(3); }
+  try { renderResult(assess(data), profile.alias); showStep(4); }
   catch { error('Não foi possível validar as respostas. Confira os campos e tente novamente.'); }
 });
 
@@ -184,11 +196,11 @@ function renderResult(result, alias) {
 }
 
 $('restart-button').addEventListener('click', () => {
-  profile = null; selectedRegions.clear(); profileForm.reset(); checkForm.reset();
+  profile = null; selectedRegions.clear(); profileForm.reset(); checkForm.reset(); mapForm.reset();
   for (const key of ['sleepHours','energy','stress','soreness','discomfortIntensity']) $(key).dispatchEvent(new Event('input'));
   refreshRegions(); showStep(1);
 });
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
-  navigator.serviceWorker.register('./sw.js',{scope:'./'}).catch(()=>{});
+  navigator.serviceWorker.register('./sw.js',{scope:'./',updateViaCache:'none'}).catch(()=>{});
 }
