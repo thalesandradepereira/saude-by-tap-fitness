@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#09211e">
+  <meta name="description" content="Check-in pré-treino educativo com revisão conservadora da intensidade. Sem armazenamento remoto de dados de saúde.">
+  <meta name="referrer" content="no-referrer">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'none'">
+  <link rel="icon" type="image/svg+xml" href="./assets/icon.svg">
+  <link rel="apple-touch-icon" href="./assets/apple-touch-icon.png">
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Saúde by TAP Fitness | Check-in pré-treino</title>
+  <script defer type="module" src="./js/app.mjs"></script>
+</head>
+<body>
+  <div class="page-shell">
+    <header class="topbar wrap">
+      <a class="brand" href="./" aria-label="Saúde by TAP Fitness — início">
+        <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 38 38" width="38" height="38"><path d="M4 20h8l4-8 7 16 4-8h7" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
+        <span><b>SAÚDE <em>by TAP</em></b><small>FITNESS INTELLIGENCE</small></span>
+      </a>
+      <div class="topbar-right"><span class="status-dot"></span><span>MVP · versão 0.1</span></div>
+    </header>
+
+    <main class="wrap app-layout" id="main">
+      <aside class="intro">
+        <div class="eyebrow"><span class="eyebrow-line"></span> INTELIGÊNCIA PARA O SEU TREINO</div>
+        <h1>Seu corpo muda.<br><span>Seu treino também.</span></h1>
+        <p class="intro-text">Antes de começar, entenda como você está hoje. Uma análise orientativa de bem-estar ajuda a conversar com seu professor sobre o treino planejado.</p>
+        <div class="intro-graphic" aria-hidden="true">
+          <div class="pulse-orbit orbit-a"></div><div class="pulse-orbit orbit-b"></div>
+          <div class="pulse-core"><svg viewBox="0 0 190 120"><path d="M2 65h40l17-31 25 64 23-47 13 14h68" stroke="currentColor" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <div class="graphic-mark graphic-one">ENERGIA</div><div class="graphic-mark graphic-two">RECUPERAÇÃO</div>
+        </div>
+        <div class="why-card"><span class="why-icon">✦</span><div><strong>Saúde primeiro. Performance com responsabilidade.</strong><p>A triagem não substitui avaliação médica, liberação clínica nem orientação de um profissional de Educação Física.</p></div></div>
+        <p class="side-caption">Desenvolvido com abordagem Saúde by TAP · Made by TAP</p>
+      </aside>
+
+      <section class="wizard" aria-labelledby="flow-title">
+        <div class="wizard-header">
+          <div class="step-indicators" aria-label="Etapas"><span class="step-chip active" id="chip-1">01 <span>Perfil</span></span><span class="step-rule"></span><span class="step-chip" id="chip-2">02 <span>Check-in</span></span><span class="step-rule"></span><span class="step-chip" id="chip-3">03 <span>Resultado</span></span></div>
+          <div class="progress-track" aria-hidden="true"><div id="progress-bar"></div></div>
+        </div>
+
+        <section class="step-panel" id="panel-1" aria-labelledby="flow-title">
+          <div class="panel-label">ETAPA 01 / 03</div>
+          <h2 id="flow-title">Vamos preparar seu check-in.</h2>
+          <p class="panel-subtitle">Use um apelido. Este piloto não cria conta nem salva respostas em servidor.</p>
+          <form id="profile-form" autocomplete="off">
+            <div class="form-row"><label class="field-label" for="alias">Como podemos chamar você?</label><input id="alias" name="alias" type="text" maxlength="30" minlength="2" autocomplete="off" placeholder="Ex.: Alex" required></div>
+            <div class="form-grid">
+              <div class="form-row"><label class="field-label" for="trainingType">Treino previsto</label><select id="trainingType" name="trainingType" required><option value="">Selecionar modalidade</option><option value="forca">Musculação / força</option><option value="cardio">Cardio / aeróbico</option><option value="misto">Misto / funcional</option><option value="mobilidade">Mobilidade</option></select></div>
+              <div class="form-row"><label class="field-label" for="plannedMinutes">Duração planejada</label><select name="plannedMinutes" id="plannedMinutes"><option value="30">30 minutos</option><option value="45" selected>45 minutos</option><option value="60">60 minutos</option><option value="75">75 minutos</option><option value="90">90 minutos</option></select></div>
+            </div>
+            <div class="form-row"><label class="field-label" for="approvedRpeCap">Limite de esforço informado pelo professor (RPE 0–10)</label><select name="approvedRpeCap" id="approvedRpeCap"><option value="3">3 — muito leve</option><option value="4">4 — leve</option><option value="5">5 — moderado</option><option value="6" selected>6 — moderado</option><option value="7">7 — vigoroso</option><option value="8">8 — vigoroso</option><option value="9">9 — muito intenso</option><option value="10">10 — máximo</option></select><small class="field-hint">O aplicativo nunca propõe intensidade acima desse limite e não valida se o limite é apropriado.</small></div>
+            <fieldset class="radio-fieldset"><legend class="field-label">Você possui um programa de treino definido e aprovado pelo professor?</legend><label class="radio-tile"><input type="radio" name="hasApprovedPlan" value="yes" required><span>Sim, já tenho</span></label><label class="radio-tile"><input type="radio" name="hasApprovedPlan" value="no"><span>Não / não tenho certeza</span></label></fieldset>
+            <label class="check-terms"><input type="checkbox" name="adult" required><span>Confirmo que tenho 18 anos ou mais.</span></label>
+            <button type="submit" class="primary-button">Continuar para o check-in <span aria-hidden="true">→</span></button>
+          </form>
+        </section>
+
+        <section class="step-panel hidden" id="panel-2" aria-labelledby="check-title">
+          <div class="panel-label">ETAPA 02 / 03 · 1–2 MINUTOS</div>
+          <h2 id="check-title">Como você está hoje?</h2>
+          <p class="panel-subtitle">Responda pensando na sua condição <strong>neste momento</strong>. As respostas são processadas apenas neste navegador.</p>
+          <form id="check-form" autocomplete="off">
+            <h3 class="section-heading"><span class="section-num">01</span> Segurança antes de tudo</h3>
+            <p class="section-hint">Marque SIM ou NÃO em cada pergunta. Não presuma ausência de sintomas.</p>
+            <div class="safety-questions">
+              <fieldset class="safety-question"><legend>Você sente dor, pressão ou aperto no peito?</legend><label><input type="radio" name="chestPain" value="yes" required><span>Sim</span></label><label><input type="radio" name="chestPain" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Tem falta de ar intensa, em repouso ou muito diferente do habitual?</legend><label><input type="radio" name="severeBreathlessness" value="yes" required><span>Sim</span></label><label><input type="radio" name="severeBreathlessness" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Teve desmaio ou sensação de que vai desmaiar?</legend><label><input type="radio" name="fainting" value="yes" required><span>Sim</span></label><label><input type="radio" name="fainting" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Está com febre ou sintomas de infecção aguda?</legend><label><input type="radio" name="fever" value="yes" required><span>Sim</span></label><label><input type="radio" name="fever" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Está com tontura atual ou incomum?</legend><label><input type="radio" name="dizziness" value="yes" required><span>Sim</span></label><label><input type="radio" name="dizziness" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Tem dor nova ou diferente da dor muscular normal de treino?</legend><label><input type="radio" name="newPain" value="yes" required><span>Sim</span></label><label><input type="radio" name="newPain" value="no"><span>Não</span></label></fieldset>
+              <fieldset class="safety-question"><legend>Houve mudança importante de saúde, lesão ou nova restrição desde o último treino?</legend><label><input type="radio" name="healthChange" value="yes" required><span>Sim</span></label><label><input type="radio" name="healthChange" value="no"><span>Não</span></label></fieldset>
+            </div>
+            <h3 class="section-heading"><span class="section-num">02</span> Recuperação e disposição</h3>
+            <p class="section-hint">As escalas abaixo são subjetivas e não substituem avaliação física ou clínica.</p>
+            <div class="slider-group">
+              <div class="slider-head"><label for="sleepHours">Horas de sono na última noite</label><output id="sleepHours-out" for="sleepHours">7,5 h</output></div>
+              <input id="sleepHours" name="sleepHours" type="range" min="0" max="12" step="0.5" value="7.5"><div class="slider-ends"><span>0 h</span><span>12 h</span></div>
+            </div>
+            <div class="slider-group">
+              <div class="slider-head"><label for="energy">Energia / disposição</label><output id="energy-out" for="energy">7/10</output></div>
+              <input id="energy" name="energy" type="range" min="0" max="10" step="1" value="7"><div class="slider-ends"><span>Sem energia</span><span>Ótima energia</span></div>
+            </div>
+            <div class="slider-group">
+              <div class="slider-head"><label for="stress">Estresse percebido</label><output id="stress-out" for="stress">3/10</output></div>
+              <input id="stress" name="stress" type="range" min="0" max="10" step="1" value="3"><div class="slider-ends"><span>Nenhum</span><span>Extremo</span></div>
+            </div>
+            <div class="slider-group">
+              <div class="slider-head"><label for="soreness">Dor muscular habitual (pós-treino)</label><output id="soreness-out" for="soreness">2/10</output></div>
+              <input id="soreness" name="soreness" type="range" min="0" max="10" step="1" value="2"><div class="slider-ends"><span>Nenhuma</span><span>Muito intensa</span></div>
+            </div>
+            <div class="button-pair"><button type="button" id="back-button" class="secondary-button">← Voltar</button><button type="submit" class="primary-button">Analisar meu check-in <span aria-hidden="true">→</span></button></div>
+          </form>
+        </section>
+
+        <section class="step-panel hidden" id="panel-3" aria-labelledby="result-title" aria-live="polite">
+          <div class="panel-label">ETAPA 03 / 03</div>
+          <h2 id="result-title">Sua análise de hoje</h2>
+          <p class="panel-subtitle" id="greeting"></p>
+          <div id="result-card" class="result-card"><div class="result-top"><span class="result-symbol" id="result-symbol">✓</span><span class="result-tag" id="result-tag">ORIENTAÇÃO</span></div><h3 id="result-level"></h3><p id="result-guidance"></p></div>
+          <div class="metrics-row" id="metrics"><div class="metric"><span>INDICADOR HEURÍSTICO</span><strong id="metric-score">—</strong></div><div class="metric"><span>RPE SUGERIDO (MÁX.)</span><strong id="metric-rpe">—</strong></div><div class="metric"><span>TEMPO ORIENTATIVO</span><strong id="metric-time">—</strong></div></div>
+          <div class="results-section"><h3>Fatores considerados</h3><ul id="reasons-list"></ul></div>
+          <div class="results-section" id="actions-section"><h3>Atividades do plano aprovado</h3><div id="actions-list"></div></div>
+          <div class="result-note"><strong>Importante</strong><p>A análise não comprova aptidão médica. O indicador de prontidão não é uma escala clínica validada. Interrompa o exercício caso surjam sintomas ou desconforto anormal.</p></div>
+          <button type="button" id="restart-button" class="primary-button">Fazer um novo check-in <span aria-hidden="true">↻</span></button>
+        </section>
+        <p role="alert" class="form-error hidden" id="form-error"></p>
+        <div class="privacy-strip"><span class="lock-icon" aria-hidden="true">♧</span><div><strong>Piloto com privacidade por padrão</strong><small>Sem login real, cookies analíticos, banco de dados ou envio remoto das respostas. Fechar ou recarregar apaga este check-in.</small></div></div>
+      </section>
+    </main>
+    <footer class="footer wrap"><span>© Saúde by TAP Fitness · Made by TAP</span><span>Protótipo educativo · <a href="./privacy.html" target="_blank" rel="noopener">Privacidade</a> · <a href="https://eparmedx.com/" target="_blank" rel="noopener noreferrer">Triagem oficial PAR-Q+</a></span></footer>
+  </div>
+</body>
+</html>

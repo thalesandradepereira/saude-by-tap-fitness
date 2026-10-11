@@ -1,0 +1,16 @@
+{
+  "id": "./",
+  "name": "Saúde by TAP Fitness",
+  "short_name": "TAP Fitness",
+  "description": "Check-in pré-treino educativo com recomendações conservadoras",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#071713",
+  "theme_color": "#09211e",
+  "lang": "pt-BR",
+  "icons": [
+    {"src":"./assets/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},
+    {"src":"./assets/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}
+  ]
+}

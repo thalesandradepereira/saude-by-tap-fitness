@@ -1,0 +1,11 @@
+{
+  "name": "saude-by-tap-fitness",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "serve": "python3 -m http.server 8765"
+  },
+  "description": "PWA demonstrativa de check-in pré-treino, com triagem conservadora e sem backend ou dados de saúde persistidos"
+}
