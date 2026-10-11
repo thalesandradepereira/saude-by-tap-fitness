@@ -1,6 +1,6 @@
 # Saúde by TAP Fitness
 
-**MVP 0.3 — PWA de entrevista pré-treino para Android, iOS e computadores.**
+**MVP 0.4 — PWA de entrevista pré-treino para Android, iOS e computadores.**
 
 Um aplicativo web responsivo que coleta respostas de um check-in de bem-estar, **identifica sinais de alerta antes de qualquer recomendação**, e apresenta orientações conservadoras sobre um treino **já definido por um profissional de Educação Física**.
 

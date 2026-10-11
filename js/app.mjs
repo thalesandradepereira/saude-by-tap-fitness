@@ -7,7 +7,7 @@ const mapForm = $('map-form');
 const yes = (form, name) => new FormData(form).get(name) === 'yes';
 let profile = null;
 const selectedRegions = new Set();
-const circlesByRegion = new Map();
+const pointsByRegion = new Map();
 const inputsByRegion = new Map();
 
 function showStep(step) {
@@ -49,36 +49,58 @@ for (const key of ['sleepHours','energy','stress','soreness','discomfortIntensit
   });
 }
 
-// Mapa orientativo: coordenadas não representam órgãos nem diagnóstico.
+// Coordenadas aproximadas em porcentagem sobre a imagem anatômica de referência.
 const MAP_POSITIONS = {
-  cabeca:['front',100,34], pescoco:['front',100,77], torax:['front',100,119],
-  peitoral:['front',83,137], abdomen_superior:['front',100,164],
-  abdomen_inferior:['front',100,197], pelve:['front',100,225],
-  costas_superiores:['back',100,129], lombar:['back',100,188],
-  ombro_d:['front',61,101], ombro_e:['front',139,101],
-  cotovelo_d:['front',43,166], cotovelo_e:['front',157,166],
-  mao_d:['front',29,207], mao_e:['front',171,207],
-  quadril_d:['front',79,247], quadril_e:['front',121,247],
-  joelho_d:['front',83,295], joelho_e:['front',117,295],
-  tornozelo_d:['front',85,339], tornozelo_e:['front',115,339],
+  // Vista frontal: coordenadas percentuais da imagem, referentes à área visível do corpo.
+  cabeca:[29.0,7.5], pescoco:[28.0,16.4], torax:[25.3,25.6],
+  peitoral:[35.4,25.8], abdomen_superior:[27.6,34.1],
+  abdomen_inferior:[27.5,42.4], pelve:[28.8,46.7],
+  // Vista posterior.
+  costas_superiores:[70.1,20.2], lombar:[70.1,38.3],
+  // Direita/esquerda anatômicas da pessoa (opostas ao observador na vista frontal).
+  ombro_d:[15.7,19.2], ombro_e:[44.5,19.2],
+  cotovelo_d:[10.4,35.4], cotovelo_e:[47.8,35.4],
+  mao_d:[7.4,52.7], mao_e:[49.4,52.7],
+  quadril_d:[22.5,51.2], quadril_e:[34.2,51.2],
+  joelho_d:[21.6,66.2], joelho_e:[36.8,66.2],
+  tornozelo_d:[21.8,83.9], tornozelo_e:[36.5,83.9],
 };
 
-function refreshRegions() {
+function labelsForSelection(limit = 3) {
+  return [...selectedRegions]
+    .map((id) => BODY_REGIONS.find((region) => region.id === id)?.label)
+    .filter(Boolean)
+    .slice(0, limit);
+}
+
+function refreshRegions(customMessage = '') {
   for (const region of BODY_REGIONS) {
     const active = selectedRegions.has(region.id);
-    inputsByRegion.get(region.id).checked = active;
-    const point = circlesByRegion.get(region.id);
-    point.classList.toggle('active', active);
-    point.setAttribute('aria-pressed', String(active));
+    const input = inputsByRegion.get(region.id);
+    if (input) input.checked = active;
+    const point = pointsByRegion.get(region.id);
+    if (point) {
+      point.classList.toggle('active', active);
+      point.setAttribute('aria-pressed', String(active));
+    }
   }
   const hasSelection = selectedRegions.size > 0;
   $('discomfort-details').classList.toggle('hidden', !hasSelection);
   $('discomfortIntensity').disabled = !hasSelection;
   $('discomfortKind').disabled = !hasSelection;
   $('discomfortKind').required = hasSelection;
-  $('region-summary').textContent = hasSelection
-    ? `${selectedRegions.size} ${selectedRegions.size===1 ? 'região selecionada' : 'regiões selecionadas'}`
-    : 'Nenhuma região selecionada';
+  if (customMessage) {
+    $('region-summary').textContent = customMessage;
+    return;
+  }
+  if (!hasSelection) {
+    $('region-summary').textContent = 'Nenhuma região selecionada';
+    return;
+  }
+  const labels = labelsForSelection();
+  $('region-summary').textContent = selectedRegions.size <= 3
+    ? `${selectedRegions.size} ${selectedRegions.size===1 ? 'região selecionada' : 'regiões selecionadas'}: ${labels.join(', ')}`
+    : `${selectedRegions.size} regiões selecionadas: ${labels.join(', ')}…`;
 }
 
 function setSelected(id, active) {
@@ -91,6 +113,7 @@ function setSelected(id, active) {
 function createMap() {
   const list = $('region-checkboxes');
   const groups = new Map();
+  const hotspotLayer = $('anatomy-hotspots');
   for (const region of BODY_REGIONS) {
     if (!groups.has(region.group)) {
       const section = document.createElement('fieldset');
@@ -110,27 +133,34 @@ function createMap() {
     label.append(input,span); groups.get(region.group).append(label);
     inputsByRegion.set(region.id, input);
 
-    const [view,x,y] = MAP_POSITIONS[region.id];
-    const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    circle.setAttribute('cx', String(x)); circle.setAttribute('cy', String(y));
-    circle.setAttribute('r','9'); circle.classList.add('map-point');
-    circle.setAttribute('role','button'); circle.setAttribute('tabindex','0');
-    circle.setAttribute('aria-label',`Marcar ${region.label}`);
-    circle.setAttribute('aria-pressed','false');
-    circle.addEventListener('click', () => setSelected(region.id,!selectedRegions.has(region.id)));
-    circle.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setSelected(region.id,!selectedRegions.has(region.id)); }
-    });
-    $(view+'-points').append(circle);
-    circlesByRegion.set(region.id,circle);
+    const [left, top] = MAP_POSITIONS[region.id];
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'map-point';
+    button.style.left = `${left}%`;
+    button.style.top = `${top}%`;
+    button.setAttribute('aria-label', `Marcar ${region.label}`);
+    button.setAttribute('aria-pressed', 'false');
+    button.setAttribute('title', region.label);
+    button.dataset.label = region.label;
+    button.innerHTML = '<span class="map-point-core" aria-hidden="true"></span><span class="map-point-text" aria-hidden="true"></span>';
+    button.querySelector('.map-point-text').textContent = region.label;
+    button.addEventListener('click', () => setSelected(region.id, !selectedRegions.has(region.id)));
+    hotspotLayer.append(button);
+    pointsByRegion.set(region.id, button);
   }
   refreshRegions();
 }
 createMap();
-$('clear-regions').addEventListener('click', () => { selectedRegions.clear(); $('discomfortKind').value=''; refreshRegions(); });
+$('clear-regions').addEventListener('click', () => {
+  selectedRegions.clear();
+  $('discomfortKind').value = '';
+  refreshRegions();
+});
 $('no-regions').addEventListener('click', () => {
-  selectedRegions.clear(); $('discomfortKind').value=''; refreshRegions();
-  $('region-summary').textContent = 'Confirmado: nenhum incômodo informado hoje';
+  selectedRegions.clear();
+  $('discomfortKind').value = '';
+  refreshRegions('Confirmado: nenhum incômodo informado hoje');
 });
 $('back-button').addEventListener('click', () => showStep(1));
 $('map-back-button').addEventListener('click', () => showStep(2));
@@ -192,7 +222,6 @@ function renderResult(result, alias) {
     info.append(textNode('strong',action.title));info.append(textNode('p',action.detail));
     row.append(info);actions.append(row);
   }
-  // Dados do check-in são temporários e não são enviados, persistidos ou exportados.
 }
 
 $('restart-button').addEventListener('click', () => {

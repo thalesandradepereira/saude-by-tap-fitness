@@ -22,7 +22,7 @@
         <span class="brand-icon" aria-hidden="true"><svg viewBox="0 0 38 38" width="38" height="38"><path d="M4 20h8l4-8 7 16 4-8h7" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/></svg></span>
         <span><b>SAÚDE <em>by TAP</em></b><small>FITNESS INTELLIGENCE</small></span>
       </a>
-      <div class="topbar-right"><span class="status-dot"></span><span>MVP · versão 0.3</span></div>
+      <div class="topbar-right"><span class="status-dot"></span><span>MVP · versão 0.4</span></div>
     </header>
 
     <main class="wrap app-layout" id="main">
@@ -48,7 +48,7 @@
         <section class="step-panel" id="panel-1" aria-labelledby="flow-title">
           <div class="panel-label">ETAPA 01 / 04</div>
           <h2 id="flow-title">Vamos preparar seu check-in.</h2>
-          <p class="panel-subtitle">Use um apelido. Este piloto não cria conta nem salva respostas em servidor. Na etapa 3, você poderá <strong>marcar no mapa corporal onde sente dor ou desconforto</strong>.</p>
+          <p class="panel-subtitle">Use um apelido. Este piloto não cria conta nem salva respostas em servidor. Na etapa 3, você poderá <strong>marcar na imagem anatômica onde sente dor ou desconforto</strong>.</p>
           <form id="profile-form" autocomplete="off">
             <div class="form-row"><label class="field-label" for="alias">Como podemos chamar você?</label><input id="alias" name="alias" type="text" maxlength="30" minlength="2" autocomplete="off" placeholder="Ex.: Alex" required></div>
             <div class="form-grid">
@@ -65,7 +65,7 @@
         <section class="step-panel hidden" id="panel-2" aria-labelledby="check-title">
           <div class="panel-label">ETAPA 02 / 04 · CHECK-IN</div>
           <h2 id="check-title">Como você está hoje?</h2>
-          <p class="panel-subtitle">Responda pensando na sua condição <strong>neste momento</strong>. Depois você irá para a <strong>etapa 3 — Mapa corporal</strong>, para marcar membros e regiões internas onde sente incômodo.</p>
+          <p class="panel-subtitle">Responda pensando na sua condição <strong>neste momento</strong>. Depois você irá para a <strong>etapa 3 — Mapa anatômico</strong>, para marcar membros e regiões internas onde sente incômodo.</p>
           <form id="check-form" autocomplete="off">
             <h3 class="section-heading"><span class="section-num">01</span> Segurança antes de tudo</h3>
             <p class="section-hint">Marque SIM ou NÃO em cada pergunta. Não presuma ausência de sintomas.</p>
@@ -111,18 +111,14 @@
             <h3 class="section-heading"><span class="section-num">03</span> Mapa corporal — membros e regiões internas</h3>
             <p class="section-hint">Marque todos os locais onde sente incômodo hoje. As referências a órgãos são apenas regiões aproximadas do corpo, <strong>não significam diagnóstico</strong>. Você pode selecionar no desenho ou na lista.</p>
             <div class="bodymap-layout">
-              <div class="bodymap-visual" aria-label="Mapa corporal frontal e posterior, com pontos selecionáveis">
-                <div class="bodymap-fig"><span>FRENTE</span>
-                  <svg class="anatomy" id="body-front" viewBox="0 0 200 370" role="group" aria-label="Vista frontal do corpo">
-                    <path class="human-silhouette" d="M100 12 C83 12 78 23 79 38 C80 55 88 62 91 66 L91 75 C78 78 65 78 55 84 C48 89 41 109 35 132 L20 206 L31 212 L55 156 L63 135 L65 196 L70 222 L78 293 L78 342 L91 352 L99 244 L101 240 L108 351 L121 343 L121 292 L134 222 L136 195 L137 136 L145 156 L168 212 L179 206 L164 132 C157 105 152 87 141 83 L110 75 L110 66 C120 55 121 37 120 30 C118 16 111 12 100 12 Z"/>
-                    <g class="map-points" id="front-points"></g>
-                  </svg>
+              <div class="bodymap-visual anatomy-reference-block" aria-label="Imagem anatômica interativa com pontos selecionáveis para registrar regiões de dor ou desconforto">
+                <div class="anatomy-reference-head">
+                  <span>MAPA ANATÔMICO INTERATIVO</span>
+                  <small>Toque nos pontos sobre a imagem ou use a lista abaixo para indicar onde há desconforto.</small>
                 </div>
-                <div class="bodymap-fig"><span>COSTAS</span>
-                  <svg class="anatomy" id="body-back" viewBox="0 0 200 370" role="group" aria-label="Vista posterior do corpo">
-                    <path class="human-silhouette" d="M100 12 C83 12 78 23 79 38 C80 55 88 62 91 66 L91 75 C78 78 65 78 55 84 C48 89 41 109 35 132 L20 206 L31 212 L55 156 L63 135 L65 196 L70 222 L78 293 L78 342 L91 352 L99 244 L101 240 L108 351 L121 343 L121 292 L134 222 L136 195 L137 136 L145 156 L168 212 L179 206 L164 132 C157 105 152 87 141 83 L110 75 L110 66 C120 55 121 37 120 30 C118 16 111 12 100 12 Z"/>
-                    <g class="map-points" id="back-points"></g>
-                  </svg>
+                <div class="anatomy-stage" id="anatomy-stage">
+                  <img class="anatomy-reference-image" src="./assets/anatomia-mapa.webp" width="1122" height="1402" alt="Imagem anatômica de referência, com frente e costas do corpo humano e indicação visual das principais regiões e órgãos aproximados.">
+                  <div class="anatomy-hotspots" id="anatomy-hotspots"></div>
                 </div>
               </div>
               <div class="bodymap-fields"><div class="bodymap-selected" id="region-summary" aria-live="polite">Nenhuma região selecionada</div>
