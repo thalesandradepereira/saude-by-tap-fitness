@@ -1,10 +1,11 @@
-# Privacidade e uso responsável — protótipo 0.1
+# Privacidade e uso responsável — protótipo 0.2
 
 ## Quais dados este protótipo solicita?
 
 - Apelido sem identificação obrigatória, modalidade de treino, tempo e limite de esforço informado.
 - Declaração de maioridade e existência de plano previamente aprovado.
 - Respostas a questões de sinais de alerta, sono, disposição, estresse e dor muscular habitual.
+- Regiões do corpo marcadas no mapa (inclusive regiões aproximadas de órgãos), intensidade do incômodo e percepção sobre a natureza da dor. Não são dados sobre diagnóstico clínico.
 
 **Não digite dados pessoais reais ou informações médicas identificáveis no piloto.** Esta versão se destina à demonstração e à validação de interface/lógica, não ao atendimento de alunos reais.
 

@@ -1,5 +1,5 @@
 // Apenas assets públicos do aplicativo são cacheados. Nenhuma resposta de saúde é persistida.
-const CACHE = 'tap-fitness-pilot-v1';
+const CACHE = 'tap-fitness-pilot-v2';
 const ASSETS = ['./', './index.html', './privacy.html', './styles.css', './js/app.mjs', './js/engine.mjs', './manifest.webmanifest', './assets/icon.svg', './assets/icon-192.png', './assets/icon-512.png', './assets/apple-touch-icon.png'];
 self.addEventListener('install', (event) => {
   event.waitUntil(caches.open(CACHE).then(cache => cache.addAll(ASSETS)).then(() => self.skipWaiting()));

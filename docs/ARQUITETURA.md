@@ -1,12 +1,12 @@
 # Arquitetura e requisitos — Saúde by TAP Fitness
 
-## Fase 1 — piloto estático (implementada)
+## Fase 1 — piloto estático v0.2 (implementada)
 
 ```
 Android / iOS / Desktop
   └── navegador/PWA (GitHub Pages)
       ├── index.html + CSS + app.mjs: formulário e visualização
-      ├── engine.mjs: regras de segurança e indicação conservadora
+      ├── engine.mjs: regiões corporais + regras de alerta e sugestões condicionais
       ├── service worker: cache apenas de assets públicos
       └── sem chamadas para APIs de cadastro, sem dados persistidos
 ```
@@ -40,7 +40,8 @@ Firestore/SQL       Auditoria imutável de ações administrativas
 - `academies`: id, nome, contrato, política de retenção, responsável pelo tratamento.
 - `users`: id pseudônimo, papel, academy_id, confirmação de idade, revisão de consentimento, status.
 - `approved_plans`: id, user_id, trainer_id, plano versionado, teto de RPE, duração e atividades aprovadas, data de revisão.
-- `checkins`: id, user_id, created_at, dados mínimos necessários, respostas de triagem criptografadas, status, versão do algoritmo.
+- `checkins`: id, user_id, created_at, dados mínimos necessários, respostas de triagem criptografadas, status, versão do algoritmo, array validado de `discomfort_regions`, `discomfort_intensity`, `discomfort_kind`.
+- `regions_catalog`: catálogo versionado de regiões anatômicas informadas pelo aluno; não inferir diagnóstico nem condição de órgão a partir de marcações.
 - `recommendations`: id, checkin_id, explicação de regras, decisão não vinculante, override por profissional.
 - `audit_events`: ação, ator, data, entidade, finalidade; **sem dados clínicos no log**.
 

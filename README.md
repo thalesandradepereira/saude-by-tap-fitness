@@ -1,6 +1,6 @@
 # Saúde by TAP Fitness
 
-**MVP 0.1 — PWA de entrevista pré-treino para Android, iOS e computadores.**
+**MVP 0.2 — PWA de entrevista pré-treino para Android, iOS e computadores.**
 
 Um aplicativo web responsivo que coleta respostas de um check-in de bem-estar, **identifica sinais de alerta antes de qualquer recomendação**, e apresenta orientações conservadoras sobre um treino **já definido por um profissional de Educação Física**.
 
@@ -10,7 +10,9 @@ Um aplicativo web responsivo que coleta respostas de um check-in de bem-estar, *
 
 - Acesso por link, interface mobile-first, PWA instalável, inclusive modo offline após primeira visita HTTPS.
 - Perfil temporário com apelido, modalidade de treino, duração programada, teto subjetivo de esforço informado, plano aprovado e confirmação de maioridade.
-- Check-in com respostas explícitas para sete perguntas de segurança e quatro indicadores subjetivos de recuperação.
+- Check-in com respostas explícitas para dez perguntas de segurança e quatro indicadores subjetivos de recuperação.
+- **Mapa corporal interativo e acessível** (frente/costas e checklist), cobrindo membros, cabeça, coluna e regiões internas de tórax/abdome/pelve. Permite assinalar vários locais, intensidade de 1–10 e natureza habitual/nova/incerta.
+- **Sugestões condicionais de atividades físicas** (caminhada, bicicleta, força e mobilidade), somente quando houver plano aprovado e ausência de alertas; as sugestões são filtradas de modo conservador por localização, para discussão com o professor. Não há prescrição automatizada.
 - Regras determinísticas com prioridade: **urgência → revisão → recuperação → redução conservadora → plano aprovado**.
 - Orientações explicáveis, limites de RPE e tempo, sem progressão automática de carga.
 - Fluxos de teste automatizados em Node.js, sem bibliotecas externas.
@@ -51,10 +53,10 @@ GitHub Pages é hospedagem estática, sem banco e sem autenticação. A própria
 
 ## Lógica de prontidão
 
-- **Urgente:** peito, dispneia importante/em repouso ou desmaio/quase desmaio → não treinar, procurar avaliação urgente; emergência quando sintomas atuais/intensos.
-- **Revisão:** febre/infecção aguda, tontura, nova dor/lesão/restrição, ausência de plano aprovado, extremos de sono, energia ou dores → não seguir sugestão do aplicativo.
+- **Urgente:** sinais torácicos, dispneia importante/em repouso, desmaio/quase desmaio, dor forte súbita, alteração neurológica importante, incapacidade de apoiar peso após lesão → não treinar, procurar avaliação urgente; emergência quando sintomas atuais/intensos.
+- **Revisão:** febre/infecção aguda, tontura, nova dor/lesão/restrição, ausência de plano aprovado, extremos de sono/energia/dores; incômodo localizado moderado/intenso, novo/incerto ou nas regiões de cabeça, coluna, peitoral, abdome ou pelve → não sugerir exercícios.
 - **Programado:** apenas continua treino aprovado, com RPE sugerido até `min(RPE_aprovado, 6)`.
-- **Reduzido:** sugere, **sujeito a acordo com professor**, reduzir tempo planejado em 30% e RPE sugerido até `min(RPE_aprovado, 4)`.
+- **Reduzido:** sugere, **sujeito a acordo com professor**, reduzir tempo planejado em 30% e RPE sugerido até `min(RPE_aprovado, 4)`; incômodo muscular habitual leve nos membros também limita a intensidade e exclui sugestões que sobrecarreguem a região.
 - **Recuperação:** desencoraja o treino programado e encaminha para o professor decidir descanso/alternativas.
 
 A pontuação 0–100 é uma **heurística interna não validada**, não deve ser apresentada como índice médico/científico. Sinais de alerta ignoram a pontuação. Esforço subjetivo 0–10 e teste da fala são referências educativas, não liberam exercício.
@@ -68,6 +70,14 @@ A pontuação 0–100 é uma **heurística interna não validada**, não deve se
 - Brasil — [Lei Geral de Proteção de Dados, Lei 13.709/2018](https://www.planalto.gov.br/ccivil_03/_ato2015-2018/2018/lei/l13709.htm).
 - GitHub — [Limites do GitHub Pages](https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits).
 
+## Referências específicas da triagem por região e atividades
+
+- ACSM (2015), [Recommendations for Exercise Preparticipation Health Screening](https://journals.lww.com/acsm-msse/fulltext/2015/11000/updating_acsm_s_recommendations_for_exercise.28.aspx): sinais/sintomas, doenças conhecidas, atividade habitual e intensidade desejada devem influenciar a avaliação pré-exercício.
+- CDC (2025), [Measuring physical activity intensity](https://www.cdc.gov/physical-activity-basics/measuring/index.html): esforço subjetivo relativo e teste da fala.
+- NHS, [joint pain](https://www.nhs.uk/symptoms/joint-pain/), [back pain](https://www.nhs.uk/conditions/back-pain/) e [stomach ache](https://www.nhs.uk/symptoms/stomach-ache/): sinais de risco e limites de orientação perante sintomas agudos.
+
+**Aviso:** essas diretrizes embasam apenas salvaguardas gerais. Nenhum limiar de dor 1–3 versus 4–10, pontuação de prontidão ou substituição de exercício deste projeto foi clinicamente validado. O mapa informa a **região percebida**, não o órgão que sofre alguma doença. Sintomas devem ser avaliados por profissionais habilitados.
+
 ## QA e melhorias propostas
 
 ```bash
@@ -76,7 +86,7 @@ node --check js/app.mjs
 npm test
 ```
 
-Antes de qualquer piloto com pessoas reais, providenciar: revisão por médico do esporte/profissional de Educação Física, avaliação LGPD, consentimentos e base legal adequados, responsável por dados, testes de usabilidade, acessibilidade, validação dos limiares, protocolos de emergência, autorização dos alunos e controle de acesso.
+Os testes automatizados abrangem cenários de urgência, sintomas viscerais, dor musculoesquelética leve, limites de esforço e ausência de autorização profissional. Antes de qualquer piloto com pessoas reais, providenciar: revisão por médico do esporte/profissional de Educação Física, avaliação LGPD, consentimentos e base legal adequados, responsável por dados, testes de usabilidade, acessibilidade, validação dos limiares, protocolos de emergência, autorização dos alunos e controle de acesso.
 
 **Roadmap:** autenticação e cadastro real; histórico privado; painel do professor; planos aprovados com versionamento; wearables com consentimento; integração com redes de academias; relatórios de eficácia e validação clínica.
 
